@@ -15,7 +15,7 @@ def CCW(
 
 def delaunay(
         a, b, c, d
-):  #determina se o quarto ponto está dentro da circunferencia // precisa que a,b,c esteja em ordem anti horaria
+):  #determina se o quarto ponto está dentro da circunferencia // precisa que a,b,c estejam em ordem anti horaria
     det = np.linalg.det(
         [[a[0] - d[0], a[1] - d[1], (a[0] - d[0])**2 + (a[1] - d[1])**2],
          [b[0] - d[0], b[1] - d[1], (b[0] - d[0])**2 + (b[1] - d[1])**2],
