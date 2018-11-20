@@ -1,1 +1,2 @@
-# transcal-triangulation
+# Point set triangulation
+
