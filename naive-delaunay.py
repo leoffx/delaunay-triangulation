@@ -26,9 +26,9 @@ def delaunay(
 
 for i in range(point_num):  #fixa primeiro ponto da triangulaçao
     p = points[i, :]
-    for j in range(point_num):  #fixa segundo ponto
+    for j in range(i,point_num):  #fixa segundo ponto
         q = points[j, :]
-        for k in range(point_num):  #fixa terceiro ponto
+        for k in range(i,point_num):  #fixa terceiro ponto
             r = points[k, :]
             z = 0
             if CCW(p, q, r):
