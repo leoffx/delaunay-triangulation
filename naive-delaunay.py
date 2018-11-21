@@ -3,8 +3,11 @@ import numpy as np
 
 point_num = 50  #número de pontos aleatórios
 
+np.random.seed(1)
 points = np.random.rand(point_num, 2)  #inicializa pontos aleatórios
-ien = []
+ien = []  #IEN
+eql = []  #equilateralidade do triangulo
+
 fig, ax = plt.subplots()
 
 
@@ -26,9 +29,9 @@ def delaunay(
 
 for i in range(point_num):  #fixa primeiro ponto da triangulaçao
     p = points[i, :]
-    for j in range(i,point_num):  #fixa segundo ponto
+    for j in range(i, point_num):  #fixa segundo ponto
         q = points[j, :]
-        for k in range(i,point_num):  #fixa terceiro ponto
+        for k in range(i, point_num):  #fixa terceiro ponto
             r = points[k, :]
             z = 0
             if CCW(p, q, r):
@@ -41,16 +44,30 @@ for i in range(point_num):  #fixa primeiro ponto da triangulaçao
                     ):  #se houver algum ponto dentro da circunferencia, não plotar
                         z += 1
                         break
-                if z == 0:
-                    plt.plot([p[0], q[0]], [p[1], q[1]], 'r-', lineWidth=.5)
+                if z == 0:  #se nenhum outro ponto fica dentro da circunferência que contém os 3 (p,q,r)
+                    plt.plot([p[0], q[0]], [p[1], q[1]], 'r-',
+                             lineWidth=.5)  #triangula
                     plt.plot([r[0], q[0]], [r[1], q[1]], 'r-', lineWidth=.5)
                     plt.plot([p[0], r[0]], [p[1], r[1]], 'r-', lineWidth=.5)
-                    ien = np.append(ien, [i, j, k])
 
+                    pq = np.linalg.norm(
+                        p - q)  #medição do grau de equilateralidade
+                    rq = np.linalg.norm(r - q)
+                    pr = np.linalg.norm(p - r)
+                    perim = (pq + rq + pr) / 2
+                    sqrt_area = (perim * (perim - pq) * (perim - rq) *
+                                 (perim - pr))**.25
+                    eql = (3**.75 * sqrt_area) / perim
+
+                    ien = np.append(ien, [i, j, k, eql])  #monta IEN + grau
+
+#numera os pontos no grafico
 for i, txt in enumerate(range(point_num)):
     ax.annotate(txt, (points[i, 0], points[i, 1]))
 
-ien = np.reshape(ien, (-1, 3))
-print(ien.shape, ien)
+ien = np.reshape(ien, (-1, 4))
+quality_avg = np.mean(ien[:, 3])
+print(ien.shape, ien,
+      '\n Grau de equilateralidade média dos triângulos: ' + str(quality_avg))
 plt.plot(points[:, 0], points[:, 1], '.')
 plt.show()
